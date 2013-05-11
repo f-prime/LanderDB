@@ -6,23 +6,22 @@ class Connect:
 
     def __init__(self, db_file):
         self.db = db_file
-        self.b = bson.BSON()
         if not os.path.exists(self.db):
             with open(self.db, 'wb') as file:
-                file.write(self.b.encode({'':''}))
+                file.write(json.dumps({}))
 
     def insert(self, collection, data):
         with open(self.db, 'rb') as file:
-            json_data = bson.decode_all(file.read())[0]
+            json_data = json.loads(file.read())
             if collection not in json_data:
                 json_data[collection] = []
             json_data[collection].append(data)
             with open(self.db, 'wb') as file:
-                file.write(self.b.encode(json_data))
+                file.write(json.dumps(json_data))
     
     def find(self, collection, data):
         with open(self.db, 'rb') as file:
-            json_data = bson.decode_all(file.read())[0]
+            json_data = json.loads(file.read())
             if collection not in json_data:
                 return False
             output = []
@@ -34,10 +33,10 @@ class Connect:
     
     def remove(self, collection, data):
         with open(self.db, 'rb') as file:
-            json_data = bson.decode_all(file.read())[0]
+            json_data = json.loads(file.read())
             if collection not in json_data:
                 return False
             json_data[collection].remove(data) #Will only delete one entry
             with open(self.db, 'wb') as file:
-                file.write(self.b.encode(json_data))
+                file.write(json.dumps(json_data))
 
