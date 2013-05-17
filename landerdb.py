@@ -26,9 +26,12 @@ class Connect:
                 return False
             output = []
             for x in json_data[collection]:
-                for y in data:
-                    if data[y] == x[y]:
-                        output.append(x)
+                if data != "all":
+                    for y in data:
+                        if data[y] == x[y]:
+                            output.append(x)
+                else:
+                    output.append(x)
             return output
     
     def remove(self, collection, data):
