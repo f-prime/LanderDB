@@ -5,40 +5,50 @@ class Connect:
 
     def __init__(self, db_file):
         self.db = db_file
+        self.json_data = {}
+        # allows find to be called multiple times, without 
+        # re-reading from disk unless a change has occured
+        self.stale = True
         if not os.path.exists(self.db):
-            with open(self.db, 'wb') as file:
-                file.write(json.dumps({}))
+           self._save()
+
+    def _load(self):
+        if self.stale:
+            with open(self.db, 'rb') as fp:
+                self.json_data = json.load(fp)
+
+    def _save(self):
+        with open(self.db, 'wb') as fp:
+            json.dump(self.json_data, fp)
+            self.stale = True
 
     def insert(self, collection, data):
-        with open(self.db, 'rb') as file:
-            json_data = json.loads(file.read())
-            if collection not in json_data:
-                json_data[collection] = []
-            json_data[collection].append(data)
-            with open(self.db, 'wb') as file:
-                file.write(json.dumps(json_data))
-    
-    def find(self, collection, data):
-        with open(self.db, 'rb') as file:
-            json_data = json.loads(file.read())
-            if collection not in json_data:
-                return False
-            output = []
-            for x in json_data[collection]:
-                if data != "all":
-                    for y in data:
-                        if data[y] == x[y]:
-                            output.append(x)
-                else:
-                    output.append(x)
-            return output
-    
+        self._load()
+        if collection not in self.json_data:
+            self.json_data[collection] = []
+        self.json_data[collection].append(data)
+        self._save()
+
     def remove(self, collection, data):
-        with open(self.db, 'rb') as file:
-            json_data = json.loads(file.read())
-            if collection not in json_data:
-                return False
-            json_data[collection].remove(data) #Will only delete one entry
-            with open(self.db, 'wb') as file:
-                file.write(json.dumps(json_data))
+        self._load()
+        if collection not in self.json_data:
+            return False
+        self.json_data[collection].remove(data) #Will only delete one entry
+        self._save()
+            
+    def find(self, collection, data):
+        self._load()
+        if collection not in self.json_data:
+            return False
+        output = []
+        for x in self.json_data[collection]:
+            if data != "all":
+                for y in data:
+                    if data[y] == x[y]:
+                        output.append(x)
+            else:
+                output.append(x)
+        return output
+    
+
 
