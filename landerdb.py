@@ -44,8 +44,11 @@ class Connect:
         for x in self.json_data[collection]:
             if data != "all":
                 for y in data:
-                    if data[y] == x[y]:
-                        output.append(x)
+                    try:
+                        if data[y] == x[y]:
+                            output.append(x)
+                    except KeyError:
+                        continue
             else:
                 output.append(x)
         return output
