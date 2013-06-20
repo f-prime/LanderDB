@@ -15,11 +15,13 @@ class Connect:
     def _load(self):
         if self.stale:
             with open(self.db, 'rb') as fp:
-                self.json_data = json.load(fp)
+                fp = fp.read().decode("hex")
+                self.json_data = json.loads(fp)
 
     def _save(self):
         with open(self.db, 'wb') as fp:
-            json.dump(self.json_data, fp)
+            f = json.dumps(self.json_data)
+            fp.write(f.encode("hex"))
             self.stale = True
 
     def insert(self, collection, data):
