@@ -1,6 +1,8 @@
 import json
 import os
 
+__version__ = "1.0.0"
+
 class Connect:
 
     def __init__(self, db_file):
