@@ -17,13 +17,11 @@ class Connect:
     def _load(self):
         if self.stale:
             with open(self.db, 'rb') as fp:
-                fp = fp.read()
-                self.json_data = json.loads(fp)
+                self.json_data = json.load(fp)
 
     def _save(self):
         with open(self.db, 'wb') as fp:
-            f = json.dumps(self.json_data)
-            fp.write(f)
+            json.dump(self.json_data, fp)
             self.stale = True
 
     def insert(self, collection, data):
