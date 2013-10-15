@@ -21,7 +21,7 @@ class Connect:
                     self.json_data = json.load(fp)
                 except:
                     with open(self.db, 'wb') as file:
-                        file.write("{}")
+                        file.write(json.dumps(self.json_data))
                     self._load()
     def _save(self):
         with open(self.db, 'wb') as fp:
