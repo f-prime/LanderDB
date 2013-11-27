@@ -12,7 +12,7 @@ class Connect:
         # re-reading from disk unless a change has occured
         self.stale = True
         if not os.path.exists(self.db):
-           self._save()
+           self.save()
         
     def _load(self):
         if self.stale:
@@ -27,7 +27,7 @@ class Connect:
         with open(self.db, 'wb') as fp:
             json.dump(self.json_data, fp)
             self.stale = True
-
+    
     def insert(self, collection, data):
         self._load()
         if collection not in self.json_data:
@@ -39,7 +39,6 @@ class Connect:
         if collection not in self.json_data:
             return False
         self.json_data[collection].remove(data) #Will only delete one entry
-        self._save()
             
     def find(self, collection, data):
         self._load()
