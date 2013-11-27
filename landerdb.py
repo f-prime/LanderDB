@@ -13,7 +13,7 @@ class Connect:
         self.stale = True
         if not os.path.exists(self.db):
            self._save()
-
+        
     def _load(self):
         if self.stale:
             with open(self.db, 'rb') as fp:
@@ -23,7 +23,7 @@ class Connect:
                     with open(self.db, 'wb') as file:
                         file.write(json.dumps(self.json_data))
                     self._load()
-    def _save(self):
+    def save(self):
         with open(self.db, 'wb') as fp:
             json.dump(self.json_data, fp)
             self.stale = True
@@ -33,7 +33,6 @@ class Connect:
         if collection not in self.json_data:
             self.json_data[collection] = []
         self.json_data[collection].append(data)
-        self._save()
 
     def remove(self, collection, data):
         self._load()
