@@ -47,12 +47,18 @@ class Connect:
         output = []
         for x in self.json_data[collection]:
             if data != "all":
+                yes = True
                 for y in data:
-                    try:
-                        if data[y] == x[y]:
-                            output.append(x)
-                    except KeyError:
-                        continue
+                    if y not in x:
+                        yes = False 
+                        break
+                    else:
+                        if data[y] != x[y]:
+                            yes = False
+                            break
+                if yes and x not in output:
+                    output.append(x)
+                    
             else:
                 output.append(x)
         return output
