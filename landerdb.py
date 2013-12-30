@@ -34,6 +34,25 @@ class Connect:
             self.json_data[collection] = []
         self.json_data[collection].append(data)
 
+    def update(self, collection, check, new):
+        self._load()
+        if collection not in self.json_data:
+            return False
+        for x in self.json_data[collection]:
+            yes = True
+            for y in check:
+                if y in x and check[y] == x[y]:
+                    continue
+                else:
+                    yes = False
+                    break
+            if yes:
+                edited = x
+                for z in new:
+                    edited[z] = new[z]
+                self.json_data[collection].remove(x)
+                self.json_data[collection].append(edited)
+
     def remove(self, collection, data):
         self._load()
         if collection not in self.json_data:

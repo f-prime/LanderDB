@@ -23,4 +23,6 @@ Usage
     data = db.find("table", "all") # Returns all data in a table
     print data # Returns [{"data":"blah"}, {"data":"blah"}]
     
+    db.update("table", {"data":"dog"}, {"data":"cat", "rand":"dog"})
+    db.save()    
 
