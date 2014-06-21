@@ -10,6 +10,9 @@ Usage
     db.insert("Table2", {"key3":"value3", "key4":"value4"}) #Inserts into the table Table2
     db.save() #Saves the db file
 
+    db.find("Table2", {"key3":"value3"})
+    #returns [{"key3":"value3", "key4":"value4"}]
+
     db.get("Table", "key1") #Returns ["value1"]
 
     db.get("Table", all_=True) #Returns [{"key1":"value1"}, {"key2":"value2"}]

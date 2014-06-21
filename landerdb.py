@@ -1,16 +1,17 @@
 import json
 import os
 
-__version__ = "1.0.0"
+__version__ = "1.3.0"
 
 class Connect:
 
-    def __init__(self, db_file):
+    def __init__(self, db_file, autosave = False):
         self.db = db_file
         self.json_data = {}
         # allows find to be called multiple times, without 
         # re-reading from disk unless a change has occured
         self.stale = True
+        self.autosave = autosave
         if not os.path.exists(self.db):
            self.save()
         
@@ -34,7 +35,8 @@ class Connect:
             self.json_data[collection] = []
         for new in data:
             self.json_data[collection].append(new)
-
+        if self.autosave:
+            self.save()
     def update(self, collection, check, new):
         self._load()
         if collection not in self.json_data:
@@ -53,13 +55,17 @@ class Connect:
                     edited[z] = new[z]
                 self.json_data[collection].remove(x)
                 self.json_data[collection].append(edited)
-
+            
+            if self.autosave:
+                self.save()
     def remove(self, collection, data):
         self._load()
         if collection not in self.json_data:
             return False
         self.json_data[collection].remove(data) #Will only delete one entry
-            
+        if self.autosave:
+            self.save()
+
     def find(self, collection, data):
         self._load()
         if collection not in self.json_data:
