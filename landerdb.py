@@ -82,15 +82,20 @@ class Connect:
             else:
                 output.append(x)
         return output
-    def get(self, collection, key):
+
+    def get(self, collection, key, all_=False):
         self._load()
         if collection not in self.json_data:
             return False
         out = []
-        for x in self.json_data[collection]:
-            if key in x:
-                out.append(x[key])
+        if not all_:
+            for x in self.json_data[collection]:
+                if key in x:
+                    out.append(x[key])
+        else:
+            out = self.json_data[collection] 
         return out if out else False
+        
     def contains(self, collection, key):
         self._load()
         if collection not in self.json_data:

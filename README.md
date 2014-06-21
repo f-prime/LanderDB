@@ -2,27 +2,20 @@ Usage
 =====
 
     import landerdb
-    
-    db = landerdb.Connect("database")
-    
-    db.insert("table", {"data":"blah"}) # Inserts into the table "table"
-    db.save()
-    db.insert("table", {"data":"AHH"}) # For later
-    db.save()
-        
-    db.insert("table", {"data":"dog", "rand":"cat"})
-    db.save()
+    db = landerdb.Connect("database") #Connects to the db "database", and in this case creates it
 
-    data = db.find("table", {"data":"blah"})
-    print data #Returns [{"data":"blah"}]
+    db.insert("Table", {"key1":"value1"}, {"key2":"value2"}) #Inserts into the table "Table"
+    db.save() #Saves the db file
 
+    db.insert("Table2", {"key3":"value3", "key4":"value4"}) #Inserts into the table Table2
+    db.save() #Saves the db file
 
-    data = db.find("table", {"data":"dog", "rand":"cat"})
-    print data #Returns [{"data":"dog", "rand":"cat"}]
+    db.get("Table", "key1") #Returns ["value1"]
 
-    data = db.find("table", "all") # Returns all data in a table
-    print data # Returns [{"data":"blah"}, {"data":"blah"}]
-    
-    db.update("table", {"data":"dog"}, {"data":"cat", "rand":"dog"})
-    db.save()    
+    db.get("Table", all_=True) #Returns [{"key1":"value1"}, {"key2":"value2"}]
 
+    db.remove("Table", {"key1":"value1"}) #Removes entry from table
+
+    db.update("Table", {"key2":"value2"}, {"key5":"value5"}) #Table "Table" now contains only {"key5":"value5"} (replacing the previous entry)
+
+    db.save() #Saves the db file
