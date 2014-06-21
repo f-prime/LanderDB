@@ -28,11 +28,12 @@ class Connect:
             json.dump(self.json_data, fp)
             self.stale = True
     
-    def insert(self, collection, data):
+    def insert(self, collection, *data):
         self._load()
         if collection not in self.json_data:
             self.json_data[collection] = []
-        self.json_data[collection].append(data)
+        for new in data:
+            self.json_data[collection].append(new)
 
     def update(self, collection, check, new):
         self._load()
@@ -81,6 +82,20 @@ class Connect:
             else:
                 output.append(x)
         return output
-    
-
-
+    def get(self, collection, key):
+        self._load()
+        if collection not in self.json_data:
+            return False
+        out = []
+        for x in self.json_data[collection]:
+            if key in x:
+                out.append(x[key])
+        return out if out else False
+    def contains(self, collection, key):
+        self._load()
+        if collection not in self.json_data:
+            return False
+        for x in self.json_data[collection]:
+            if key in x:
+                return True
+        return False
