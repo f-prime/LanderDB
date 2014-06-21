@@ -59,6 +59,30 @@ class Connect:
         if collection not in self.json_data:
             return False
         self.json_data[collection].remove(data) #Will only delete one entry
+            
+    def find(self, collection, data):
+        self._load()
+        if collection not in self.json_data:
+            return False
+        output = []
+        for x in self.json_data[collection]:
+            if data != "all":
+                yes = True
+                for y in data:
+                    if y not in x:
+                        yes = False 
+                        break
+                    else:
+                        if data[y] != x[y]:
+                            yes = False
+                            break
+                if yes and x not in output:
+                    output.append(x)
+                    
+            else:
+                output.append(x)
+        return output
+
     def get(self, collection, key, all_=False):
         self._load()
         if collection not in self.json_data:
@@ -71,6 +95,7 @@ class Connect:
         else:
             out = self.json_data[collection] 
         return out if out else False
+        
     def contains(self, collection, key):
         self._load()
         if collection not in self.json_data:
